@@ -36,8 +36,8 @@ def bethe(rho, Z, A, I, E, type):
 	elif type ==1:
 		gamma = E/m_e**2 +1
 		beta = np.sqrt(1-1/gamma**2)
-		T_max = 2.*m_e*(beta*gamma)**2/(1+(2*m_e)/m_e *gamma + m_e**2/m_e**2) #MeV
-		z = 2.
+		T_max = 5.
+		z = 1.
 	elif type ==2:
 		gamma = E/m_e + 1
 		beta = sqrt(1 - gamma**(-2))
