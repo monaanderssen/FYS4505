@@ -108,28 +108,43 @@ def InverseStoppingPower(Energy, rho, I, A, Z):
 	S_inv = S**(-1)
 	return S_inv
 
-N=1000
+# Parameters for air:
+rho_air = 1.205e-3
+I_air = 85.7e-6
+Z_air = (6.+7.+8.+18.)/4.
+A_air = (0.000124*12.011 + 0.755267*14.007 + 0.231781*15.999 + 0.012827*39.948)
+
+#print Z_air, A_air
+
+N=10000
 Range_Al = np.zeros(20)
 Range_con = np.zeros(20)
+Range_air = np.zeros(20)
 for k in range(20):
-	Eincoming=np.linspace(0.2e3,10e3,20)
-	E = np.linspace(0.1e3,Eincoming[k], N)
+	Eincoming=np.linspace(0.2,10e3,20)
+	E = np.linspace(0.1,Eincoming[k], N)
 	InverseSP_Al = np.zeros(len(E))
 	InverseSP_con = np.zeros(len(E))
+	InverseSP_air = np.zeros(len(E))
 	for i in range(N):
 		InverseSP_Al[i] = InverseStoppingPower(E[i], rho_Al, I_Al, A_Al, Z_Al)
 		InverseSP_con[i] = InverseStoppingPower(E[i], rho_con, I_con, A_con, Z_con)
-
+		InverseSP_air[i] = InverseStoppingPower(E[i], rho_air, I_air, A_air, Z_air)
 	Range_Al[k] = simps(InverseSP_Al, E)
 	Range_con[k] = simps(InverseSP_con, E)
-	#print(Range[k])
+	Range_air[k] = simps(InverseSP_air, E)
+
 plt.loglog(Eincoming, Range_Al)
 plt.loglog(Eincoming, Range_con)
+plt.loglog(Eincoming, Range_air)
 plt.xlabel('Particle energy [MeV]')
 plt.ylabel('Range [g/cm^2]')
-plt.legend(['Aluminum', 'Portland concrete'], loc=2)
+plt.legend(['Aluminum', 'Portland concrete', 'Air'], loc=2)
 plt.title('Particle range in different materials')
 plt.grid(True, which="both")
 plt.show()
+
+
+#plt.show()
 
 
